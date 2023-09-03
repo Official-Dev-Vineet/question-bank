@@ -1,12 +1,16 @@
 import PropTypes from "prop-types";
-export const AttemptedQuestion = ({ question }) => {
-  console.log(question);
+export const AttemptedQuestion = ({ questions }) => {
+
   return (
     <aside>
-      <h2 style={{textAlign: "center"}}>Attempted</h2>
+      <h2 style={{ textAlign: "center" }}>Attempted</h2>
       <ul className="attempted-question">
-        {question.map((item, index) => {
-          return <li key={index} className="option">{index+1}. {item.question} </li>;
+        {questions.map((item, index) => {
+          return (
+            <li key={index} className="option">
+              {index + 1}. {item.question}{" "}
+            </li>
+          );
         })}
       </ul>
     </aside>
@@ -14,5 +18,5 @@ export const AttemptedQuestion = ({ question }) => {
 };
 
 AttemptedQuestion.propTypes = {
-  question: PropTypes.array.isRequired,
+  questions: PropTypes.array.isRequired,
 };

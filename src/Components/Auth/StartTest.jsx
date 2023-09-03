@@ -6,17 +6,18 @@ import { questionBankOfGithub } from "../../../Constant";
 import { questionBankOfLinux } from "../../../Constant";
 import { questionBankOfReact } from "../../../Constant";
 import { questionBankOfUiUx } from "../../../Constant";
-
 export const StartTest = () => {
   const [attemptedQuestion, setAttemptedQuestion] = useState([]);
   const [questionBank, setQuestionBank] = useState([]);
+  const [isSelected, setIsSelected] = useState(false);
   const [timeLeft, setTimeLeft] = useState();
+  const [selectedAnswer, setSelectedAnswer] = useState("");
   const [isStarted, setIsStarted] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const { userId, test } = useParams();
   const navigate = useNavigate();
   useEffect(() => {
-    !userId ? navigate(`/`) : null;
+    !userId ? navigate(`/`, { replace: true }) : null;
     setQuestionBank(
       test === "Github"
         ? questionBankOfGithub
@@ -29,14 +30,35 @@ export const StartTest = () => {
         : []
     );
     document.title = `Test of ${test}`;
+    document.oncontextmenu = () => false;
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        nextQuestionHandler();
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const nextQuestionHandler = () => {
-    if (currentQuestion < questionBank.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
+    if (currentQuestion < questionBank.length) {
+      setAttemptedQuestion([
+        ...attemptedQuestion,
+        {
+          question: questionBank[currentQuestion].question,
+          select: selectedAnswer,
+        },
+      ]);
+      setIsSelected(false);
     }
-    setAttemptedQuestion([...attemptedQuestion, questionBank[currentQuestion]]);
+    navigate(`/result/result-for-${userId}/${test}`, { replace: true });
   };
-
+  if (currentQuestion < questionBank.length - 1) {
+    setCurrentQuestion(currentQuestion + 1);
+  } else {
+    localStorage.setItem(
+      "attemptedQuestion",
+      JSON.stringify(attemptedQuestion)
+    );
+  }
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const secondsRemaining = seconds % 60;
@@ -57,14 +79,19 @@ export const StartTest = () => {
         clearInterval(timer);
       };
     }
-  }, [timeLeft]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isStarted]);
   return (
     <main>
-      <AttemptedQuestion question={attemptedQuestion} />
+      <AttemptedQuestion questions={attemptedQuestion} />
       <div className="question-container">
         <div className="flex flex-between gap-md">
           <h2 style={{ marginBlockEnd: "10px" }}>
-            Question {currentQuestion + 1} of {questionBank.length}
+            {isStarted ? (
+              <>
+                Question {currentQuestion + 1} of {questionBank.length}
+              </>
+            ) : null}
           </h2>
           {isStarted ? (
             <>Time Left : {formatTime(timeLeft)}</>
@@ -83,13 +110,19 @@ export const StartTest = () => {
         {isStarted && (
           <>
             <h3 className="question">
-              {" "}
               {currentQuestion + 1}. {questionBank[currentQuestion]?.question}
             </h3>
             <ul className="">
               {questionBank[currentQuestion]?.option.map((item, index) => {
                 return (
-                  <li key={index} className="option">
+                  <li
+                    key={index}
+                    className="option"
+                    onClick={() => {
+                      setSelectedAnswer(item);
+                      setIsSelected(true);
+                    }}
+                  >
                     <label htmlFor={item}>
                       <input
                         type="radio"
@@ -103,8 +136,12 @@ export const StartTest = () => {
                 );
               })}
             </ul>
-            <button onClick={() => nextQuestionHandler()} className="btn">
-              Next
+            <button
+              onClick={() => nextQuestionHandler()}
+              disabled={!isSelected}
+              className={!isSelected ? "btn disabled" : "btn"}
+            >
+              {currentQuestion === questionBank.length - 1 ? "Finish" : "Next"}
             </button>
           </>
         )}

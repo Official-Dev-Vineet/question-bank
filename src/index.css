@@ -157,6 +157,9 @@ section {
   text-transform: capitalize;
   cursor: pointer;
 }
+.btn.disabled{
+  cursor: not-allowed;
+}
 .flex-wrap-item {
   margin-top: 1rem;
   display: flex;

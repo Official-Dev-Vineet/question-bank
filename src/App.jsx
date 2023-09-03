@@ -11,6 +11,7 @@ import { RootLayout } from "./Utils/RootLayout";
 import { User } from "./Components/Auth/User";
 import { Auth } from "./Components/Auth/Auth";
 import { StartTest } from "./Components/Auth/StartTest";
+import { Result } from "./Components/Auth/Result";
 export const App = () => {
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("userData")) || null
@@ -26,6 +27,7 @@ export const App = () => {
         <Route path="start-test" element={<StartTest />}>
           <Route path=":userId/:test" element={<StartTest />} />
         </Route>
+        <Route path="result/:userId/:test" element={<Result />} />
         <Route path="*" element={<Lander />} />
       </Route>
     )

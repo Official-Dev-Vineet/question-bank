@@ -47,8 +47,7 @@ export const Auth = () => {
       </div>
       <div className="link-group">
         choose Your Test :{" "}
-        <select onChange={(e) => setSelectedTest(e.target.value)}>
-          <option selected disabled>--select--</option>
+        <select onChange={(e) => setSelectedTest(e.target.value)} value={selectedTest}>
           <option value={"React"}>React</option>
           <option value={"Github"}>Github</option>
           <option value={"UiUx"}>UI-UX</option>
