@@ -1,9 +1,10 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserData } from "../../../Context";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 export const Auth = () => {
   const { user } = useContext(UserData);
+  const [selectedTest, setSelectedTest] = useState("");
   const { userId } = useParams();
   const navigate = useNavigate();
   useEffect(() => {
@@ -43,10 +44,24 @@ export const Auth = () => {
         <Link to="/user" className="btn">
           Edit
         </Link>
-        <Link to={`/start-test/${userId}`} className="btn">
-          select Your Test
-        </Link>
       </div>
+      <div className="link-group">
+        choose Your Test :{" "}
+        <select onChange={(e) => setSelectedTest(e.target.value)}>
+          <option selected disabled>--select--</option>
+          <option value={"React"}>React</option>
+          <option value={"Github"}>Github</option>
+          <option value={"UiUx"}>UI-UX</option>
+          <option value={"Linux"}>Linux</option>
+        </select>
+      </div>
+      {selectedTest !== "" && (
+        <div className="link-group">
+          <Link to={`/start-test/${userId}/${selectedTest}`} className="btn">
+            Start Test
+          </Link>
+        </div>
+      )}
     </section>
   );
 };

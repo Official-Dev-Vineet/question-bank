@@ -1,0 +1,39 @@
+main {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 1rem;
+}
+aside {
+  width: 100%;
+  background-color: var(--light-primary);
+  height: 100vh;
+  overflow: auto;
+  color: #fff;
+}
+aside .attempted-question {
+  padding: 1rem;
+  overflow-y: auto;
+}
+aside .attempted-question li{
+  padding: 0.5rem;
+}
+.option {
+  max-width: 95%;
+  background-color: var(--primary-color);
+  margin-bottom: 1rem;
+  border-radius: 0.4rem;
+  color: #fff;
+  cursor: pointer;
+}
+.option label {
+  display: flex;
+  padding: 0.5rem;
+  width: 100%;
+  gap: 10px;
+  align-items: center;
+  display: block;
+  height:100%;
+}
+.option:hover {
+  background-color: var(--light-primary);
+}
