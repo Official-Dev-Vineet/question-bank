@@ -55,14 +55,18 @@ export const Result = () => {
         </button>
       </h2>
 
-      <SvgCircle
-        data={score}
-        total={questionBank.length}
-        text={((score / questionBank.length) * 100).toFixed(2)}
-      />
-      <div className="group" style={{ marginTop: "20px" }}>
-      <Link to={`/auth/${userId}`}>Go to DashBoard</Link>
-      </div>
+      {isGet && (
+        <>
+          <SvgCircle
+            data={score}
+            total={questionBank.length}
+            text={((score / questionBank.length) * 100).toFixed(2)}
+          />
+          <div className="group" style={{ marginTop: "20px" }}>
+            <Link to={`/auth`}>Go to DashBoard</Link>
+          </div>
+        </>
+      )}
     </section>
   );
 };

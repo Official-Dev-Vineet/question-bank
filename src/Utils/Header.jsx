@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { UserData } from "../../Context";
 import { useContext } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 export const Header = ({ tag = "h2", title, subtitle }) => {
   const { userId, test } = useParams();
   const { user } = useContext(UserData);
@@ -9,7 +9,11 @@ export const Header = ({ tag = "h2", title, subtitle }) => {
     <header>
       {tag === "h1" ? <h1>{title}</h1> : <h2>{title}</h2>}
       <p>
-        {userId}/{test}
+        {!userId && !test ? (
+          <Link to="/auth">Login</Link>
+        ) : (
+          <Link to="/">Home</Link>
+        )}
       </p>
       <div className="flex flex-between gp-md">
         <p>{subtitle}</p>

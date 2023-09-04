@@ -29,13 +29,18 @@ export const StartTest = () => {
         ? questionBankOfReact
         : []
     );
-    document.title = `Test of ${test}`;
-    document.oncontextmenu = () => false;
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        nextQuestionHandler();
-      }
+    window.addEventListener("blur", () => {
+      setIsStarted(false);
+     ()=> alert("you can't change your window or browser tab while test is running");
+      navigate(`/`, { replace: true });
     });
+    document.title = `Test of ${test}`;
+    document.body.oncontextmenu = () => false;
+    window.addEventListener("keydown", function (e) {
+      e.preventDefault();
+      return false;
+    });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const nextQuestionHandler = () => {
@@ -47,18 +52,12 @@ export const StartTest = () => {
           select: selectedAnswer,
         },
       ]);
+    }
+    if (currentQuestion < questionBank.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
       setIsSelected(false);
     }
-    navigate(`/result/result-for-${userId}/${test}`, { replace: true });
   };
-  if (currentQuestion < questionBank.length - 1) {
-    setCurrentQuestion(currentQuestion + 1);
-  } else {
-    localStorage.setItem(
-      "attemptedQuestion",
-      JSON.stringify(attemptedQuestion)
-    );
-  }
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const secondsRemaining = seconds % 60;
@@ -71,6 +70,7 @@ export const StartTest = () => {
     if (timeLeft <= 0) {
       // Timer has reached zero, you can perform any action here
       alert("Timer expired!");
+      navigate(`/result/result-for-${userId}/${test}`, { replace: true });
     } else {
       const timer = setInterval(() => {
         setTimeLeft((prevTime) => prevTime - 1);
@@ -85,27 +85,28 @@ export const StartTest = () => {
     <main>
       <AttemptedQuestion questions={attemptedQuestion} />
       <div className="question-container">
-        <div className="flex flex-between gap-md">
+        <div
+          className="flex flex-between gap-md"
+          style={{ padding: "10px 20px" }}
+        >
           <h2 style={{ marginBlockEnd: "10px" }}>
             {isStarted ? (
               <>
                 Question {currentQuestion + 1} of {questionBank.length}
               </>
-            ) : null}
+            ) : (
+              <button
+                className="btn"
+                onClick={() => {
+                  setIsStarted(true);
+                  setTimeLeft(questionBank.length * 60);
+                }}
+              >
+                Start Test
+              </button>
+            )}
           </h2>
-          {isStarted ? (
-            <>Time Left : {formatTime(timeLeft)}</>
-          ) : (
-            <button
-              className="btn"
-              onClick={() => {
-                setIsStarted(true);
-                setTimeLeft(questionBank.length * 60);
-              }}
-            >
-              Start
-            </button>
-          )}
+          {isStarted ? <>Time Left : {formatTime(timeLeft)}</> : null}
         </div>
         {isStarted && (
           <>

@@ -8,7 +8,7 @@ export const Auth = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   useEffect(() => {
-    if (!userId || !user) {
+    if (!user) {
       navigate(`/user`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -48,6 +48,7 @@ export const Auth = () => {
       <div className="link-group">
         choose Your Test :{" "}
         <select onChange={(e) => setSelectedTest(e.target.value)} value={selectedTest}>
+          <option value={""} disabled>Select</option>
           <option value={"React"}>React</option>
           <option value={"Github"}>Github</option>
           <option value={"UiUx"}>UI-UX</option>

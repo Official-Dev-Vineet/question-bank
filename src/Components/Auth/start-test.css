@@ -2,6 +2,11 @@ main {
   display: grid;
   grid-template-columns: 300px 1fr;
   gap: 1rem;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
 }
 aside {
   width: 100%;
@@ -10,6 +15,9 @@ aside {
   overflow: auto;
   color: #fff;
 }
+aside::-webkit-scrollbar{
+  width: 0;
+}
 aside .attempted-question {
   padding: 1rem;
   overflow-y: auto;
@@ -17,13 +25,12 @@ aside .attempted-question {
 aside .attempted-question li {
   padding: 0.5rem;
 }
-.option {
+.option, .attempted-question li {
   max-width: 95%;
   background-color: var(--primary-color);
   margin-bottom: 1rem;
   border-radius: 0.4rem;
   color: #fff;
-  cursor: pointer;
 }
 .option label {
   display: flex;
@@ -33,8 +40,9 @@ aside .attempted-question li {
   align-items: center;
   display: block;
   height: 100%;
+  cursor: pointer;
 }
-.option:hover {
+.option:hover, .attempted-question li:hover {
   background-color: var(--light-primary);
 }
 .result-circle {
@@ -44,7 +52,7 @@ aside .attempted-question li {
   justify-content: center;
 }
 .result-circle svg {
- position: relative;
+  position: relative;
   height: 150px;
   width: 150px;
 }
@@ -53,14 +61,30 @@ svg circle {
   height: 100%;
   fill: none;
   stroke-width: 10;
-  stroke: rgba(100,100, 100, 0.4);
+  stroke: rgba(100, 100, 100, 0.4);
   transform: translate(-5px, -5px);
   stroke-linecap: round;
 }
 svg circle:last-child {
   transition: stroke-dashoffset 0.5s ease-in-out;
 }
-svg text{
+svg text {
   font: bold 16px sans-serif;
   text-anchor: middle;
+}
+.attempted-question li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  cursor: pointer;
+
+}
+.attempted-question li span:last-child{
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+  color: aqua;
+  display: none;
+}
+.attempted-question li span.show{
+  display:block;
 }

@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 
 export const SvgCircle = ({ data, total, text }) => {
-  console.log(data);
   // Define SVG circle attributes based on the data
   const centerX = 75; // X-coordinate of the center
   const centerY = 75; // Y-coordinate of the center

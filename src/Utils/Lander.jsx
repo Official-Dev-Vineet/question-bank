@@ -15,7 +15,7 @@ export const Lander = ({ children }) => {
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
           {children}
         </div>
-        <Link to="/auth">Get Started</Link>
+        <Link to="/user">Get Started</Link>
       </section>
     </>
   );
