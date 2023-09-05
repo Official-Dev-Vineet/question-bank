@@ -7,6 +7,7 @@ import { questionBankOfLinux } from "../../../Constant";
 import { questionBankOfReact } from "../../../Constant";
 import { questionBankOfUiUx } from "../../../Constant";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { Instruction } from "../../Utils/Instruction";
 export const StartTest = () => {
   const [isActive, setIsActive] = useState(false);
   const [attemptedQuestion, setAttemptedQuestion] = useState([]);
@@ -116,6 +117,7 @@ export const StartTest = () => {
         clearInterval(timer);
       };
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isStarted, timeLeft]);
   return (
@@ -132,16 +134,16 @@ export const StartTest = () => {
           className="flex flex-between gap-md"
           style={{ padding: "10px 20px" }}
         >
-          <h2
-            style={{
-              margin:"2.5px 10px",
-            }}
-          >
-            {isStarted ? (
-              <>
-                Question {currentQuestion + 1} of {questionBank.length}
-              </>
-            ) : (
+          {isStarted ? (
+            <h2
+              style={{
+                margin: "2.5px 10px",
+              }}
+            >
+              Question {currentQuestion + 1} of {questionBank.length}
+            </h2>
+          ) : (
+            <div>
               <button
                 className="btn"
                 onClick={() => {
@@ -151,8 +153,10 @@ export const StartTest = () => {
               >
                 Start Test
               </button>
-            )}
-          </h2>
+              <Instruction />
+            </div>
+          )}
+
           {isStarted ? <>Time Left : {timer}</> : null}
         </div>
         {isStarted && (
