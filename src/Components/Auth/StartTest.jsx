@@ -39,12 +39,12 @@ export const StartTest = () => {
         ? questionBankOfReact
         : []
     );
-    // window.addEventListener("blur", () => {
-    //   setIsStarted(false);
-    //   navigate(`/failed test for ${test} due to invalid activity`, {
-    //     replace: true,
-    //   });
-    // });
+    window.addEventListener("blur", () => {
+      setIsStarted(false);
+      navigate(`/failed test for ${test} due to invalid activity`, {
+        replace: true,
+      });
+    });
     document.title = `Test of ${test}`;
     document.body.oncontextmenu = () => false;
     window.addEventListener("keydown", function (e) {
