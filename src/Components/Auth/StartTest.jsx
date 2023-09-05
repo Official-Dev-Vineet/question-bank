@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./start-test.css";
-import { AttemptedQuestion } from "./AttemptedQuestion";
+import AttemptedQuestion from "./AttemptedQuestion";
 import { questionBankOfGithub } from "../../../Constant";
 import { questionBankOfLinux } from "../../../Constant";
 import { questionBankOfReact } from "../../../Constant";
 import { questionBankOfUiUx } from "../../../Constant";
+import { GiHamburgerMenu } from "react-icons/gi";
 export const StartTest = () => {
+  const [isActive, setIsActive] = useState(false);
   const [attemptedQuestion, setAttemptedQuestion] = useState([]);
   const [questionBank, setQuestionBank] = useState([]);
   const [isSelected, setIsSelected] = useState(false);
@@ -17,7 +19,15 @@ export const StartTest = () => {
   const { userId, test } = useParams();
   const navigate = useNavigate();
   useEffect(() => {
-    !userId ? navigate(`/`, { replace: true }) : null;
+    !userId
+      ? navigate(
+          `/`,
+          {
+            replace: true,
+          },
+          { state: { msg: `failed test for ${test} due to invalid activity` } }
+        )
+      : null;
     setQuestionBank(
       test === "Github"
         ? questionBankOfGithub
@@ -29,21 +39,34 @@ export const StartTest = () => {
         ? questionBankOfReact
         : []
     );
-    window.addEventListener("blur", () => {
-      setIsStarted(false);
-     ()=> alert("you can't change your window or browser tab while test is running");
-      navigate(`/`, { replace: true });
-    });
+    // window.addEventListener("blur", () => {
+    //   setIsStarted(false);
+    //   navigate(`/failed test for ${test} due to invalid activity`, {
+    //     replace: true,
+    //   });
+    // });
     document.title = `Test of ${test}`;
     document.body.oncontextmenu = () => false;
     window.addEventListener("keydown", function (e) {
-      e.preventDefault();
-      return false;
+      if (e.key === "Escape") {
+        setIsStarted(false);
+        navigate(`/`, { replace: true });
+      }
+      if (e.keyCode === 91 || e.key === "Meta") {
+        e.preventDefault();
+      }
+      if (e.key === "Fn") {
+        e.preventDefault();
+      }
+      if (e.key === "F12") {
+        e.preventDefault();
+      }
     });
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const nextQuestionHandler = () => {
+    setIsSelected(false);
+    setSelectedAnswer("");
     if (currentQuestion < questionBank.length) {
       setAttemptedQuestion([
         ...attemptedQuestion,
@@ -52,11 +75,20 @@ export const StartTest = () => {
           select: selectedAnswer,
         },
       ]);
-    }
-    if (currentQuestion < questionBank.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
-      setIsSelected(false);
     }
+  };
+  useEffect(() => {
+    isStarted && currentQuestion === questionBank.length && goToResultHandler();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentQuestion]);
+  const goToResultHandler = () => {
+    setIsStarted(false);
+    localStorage.setItem(
+      "attemptedQuestion",
+      JSON.stringify(attemptedQuestion)
+    );
+    navigate(`/result/result-for:${userId}/${test}`, { replace: true });
   };
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -66,10 +98,15 @@ export const StartTest = () => {
       secondsRemaining < 10 ? `0${secondsRemaining}` : `${secondsRemaining}`;
     return `${formattedMinutes}:${formattedSeconds}`;
   };
+  const timer = useMemo(() => {
+    return formatTime(timeLeft);
+  }, [timeLeft]);
   useEffect(() => {
     if (timeLeft <= 0) {
-      // Timer has reached zero, you can perform any action here
-      alert("Timer expired!");
+      localStorage.setItem(
+        "attemptedQuestion",
+        JSON.stringify(attemptedQuestion)
+      );
       navigate(`/result/result-for-${userId}/${test}`, { replace: true });
     } else {
       const timer = setInterval(() => {
@@ -80,16 +117,26 @@ export const StartTest = () => {
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isStarted]);
+  }, [isStarted, timeLeft]);
   return (
     <main>
-      <AttemptedQuestion questions={attemptedQuestion} />
+      <AttemptedQuestion questions={attemptedQuestion} activeState={isActive} />
+      <div
+        className={`bar ${isActive ? "active" : ""}`}
+        onClick={() => setIsActive(!isActive)}
+      >
+        <GiHamburgerMenu />
+      </div>
       <div className="question-container">
         <div
           className="flex flex-between gap-md"
           style={{ padding: "10px 20px" }}
         >
-          <h2 style={{ marginBlockEnd: "10px" }}>
+          <h2
+            style={{
+              margin:"2.5px 10px",
+            }}
+          >
             {isStarted ? (
               <>
                 Question {currentQuestion + 1} of {questionBank.length}
@@ -106,7 +153,7 @@ export const StartTest = () => {
               </button>
             )}
           </h2>
-          {isStarted ? <>Time Left : {formatTime(timeLeft)}</> : null}
+          {isStarted ? <>Time Left : {timer}</> : null}
         </div>
         {isStarted && (
           <>
@@ -118,21 +165,15 @@ export const StartTest = () => {
                 return (
                   <li
                     key={index}
-                    className="option"
+                    className={`option ${
+                      selectedAnswer === item ? "selected" : ""
+                    }`}
                     onClick={() => {
                       setSelectedAnswer(item);
                       setIsSelected(true);
                     }}
                   >
-                    <label htmlFor={item}>
-                      <input
-                        type="radio"
-                        name="option"
-                        id={item}
-                        value={item}
-                      />
-                      {item}
-                    </label>
+                    {item}
                   </li>
                 );
               })}
@@ -142,7 +183,7 @@ export const StartTest = () => {
               disabled={!isSelected}
               className={!isSelected ? "btn disabled" : "btn"}
             >
-              {currentQuestion === questionBank.length - 1 ? "Finish" : "Next"}
+              Next
             </button>
           </>
         )}

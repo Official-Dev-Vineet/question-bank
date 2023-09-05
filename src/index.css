@@ -7,6 +7,9 @@ html {
   font-family: inherit;
   list-style: none;
 }
+*::-webkit-scrollbar{
+  width: 0;
+}
 :root {
   --primary-color: #841fd2;
   --light-primary: #a54fe7;
@@ -33,6 +36,7 @@ body {
 /* header styling  */
 #root {
   max-width: 1600px;
+  margin: 0 auto;
 }
 header,
 footer {
@@ -157,7 +161,7 @@ section {
   text-transform: capitalize;
   cursor: pointer;
 }
-.btn.disabled{
+.btn.disabled {
   cursor: not-allowed;
 }
 .flex-wrap-item {
@@ -193,4 +197,41 @@ section {
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
+}
+.popUp {
+  
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.pop-content {
+  text-align: center;
+  padding: 1rem;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-radius: 0.3rem;
+  background-color: var(--primary-color);
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+}
+.center {
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.result-page{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 500px;
 }

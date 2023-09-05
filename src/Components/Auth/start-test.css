@@ -7,15 +7,38 @@ main {
   -moz-user-select: none;
   -ms-user-select: none;
   -o-user-select: none;
+  height: 500px;
+  overflow: hidden;
+  position: relative;
+}
+@media print {
+  html,
+  body {
+    display: none;
+  }
 }
 aside {
   width: 100%;
+  height: 100%;
   background-color: var(--light-primary);
-  height: 100vh;
+  color: #ffffff;
+  transition: transform 0.3s ease-in-out;
   overflow: auto;
-  color: #fff;
 }
-aside::-webkit-scrollbar{
+.bar {
+  display: none;
+  z-index: 99;
+  position: absolute;
+  top: 2rem;
+  left: 1rem;
+}
+.bar svg {
+  cursor: pointer;
+  color: var(--primary-color);
+  font-size: 1.2rem;
+}
+
+aside::-webkit-scrollbar {
   width: 0;
 }
 aside .attempted-question {
@@ -25,25 +48,36 @@ aside .attempted-question {
 aside .attempted-question li {
   padding: 0.5rem;
 }
-.option, .attempted-question li {
+.question-container {
+  padding: 1rem;
+}
+.option,
+.attempted-question li {
   max-width: 95%;
-  background-color: var(--primary-color);
+  background-color: var(--light-primary);
   margin-bottom: 1rem;
   border-radius: 0.4rem;
   color: #fff;
-}
-.option label {
-  display: flex;
-  padding: 0.5rem;
-  width: 100%;
-  gap: 10px;
-  align-items: center;
-  display: block;
-  height: 100%;
   cursor: pointer;
+  padding: 0.5rem 1rem;
+  position: relative;
 }
-.option:hover, .attempted-question li:hover {
-  background-color: var(--light-primary);
+.option.selected {
+  background-color: var(--primary-color);
+}
+.option.selected::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 100%;
+  border-radius: 50%;
+  background-color: black;
+}
+.option:hover,
+.attempted-question li:hover {
+  background-color: var(--primary-color);
 }
 .result-circle {
   display: flex;
@@ -76,15 +110,32 @@ svg text {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  cursor: pointer;
-
 }
-.attempted-question li span:last-child{
+.attempted-question li span:last-child {
   margin-left: 0.5rem;
   font-size: 0.8rem;
-  color: aqua;
+  color: black;
   display: none;
 }
-.attempted-question li span.show{
-  display:block;
+.attempted-question li span.show {
+  display: block;
+}
+@media screen and (max-width: 768px) {
+  main {
+    grid-template-columns: 1fr;
+  }
+  aside {
+    position: absolute;
+    z-index: 1;
+    transform: translateX(-100%);
+  }
+  .bar {
+    display: inline-block;
+  }
+  aside.active {
+    transform: translateX(0);
+  }
+  .bar.active svg {
+    color: #fff;
+  }
 }

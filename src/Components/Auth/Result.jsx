@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { questionBankOfGithub } from "../../../Constant";
 import { questionBankOfLinux } from "../../../Constant";
 import { questionBankOfReact } from "../../../Constant";
 import { questionBankOfUiUx } from "../../../Constant";
 import { SvgCircle } from "../../Utils/SvgCircle";
+import { UserData } from "../../../Context";
 export const Result = () => {
+  const { user } = useContext(UserData);
   const [questionBank, setQuestionBank] = useState([]);
   const { userId, test } = useParams();
   const navigate = useNavigate();
@@ -15,14 +17,14 @@ export const Result = () => {
   const [score, setScore] = useState(0);
   const [isGet, setIsGet] = useState(false);
   const calculateResult = async () => {
-    await attemptedQuestion.map((item, index) => {
-      if (item.select === questionBank[index]["answer"]) {
-        setScore((pre) => pre + 1);
-        document.title = `Result  of ${test} test : ${score}`;
-      }
-    });
+    attemptedQuestion.length > 0
+      ? await attemptedQuestion.map((item, index) => {
+          if (item.select === questionBank[index]["answer"]) {
+            setScore((pre) => pre + 1);
+          }
+        })
+      : alert("please try again");
     setIsGet(true);
-    localStorage.removeItem("attemptedQuestion");
   };
   useEffect(() => {
     if (!userId && !test) {
@@ -39,11 +41,11 @@ export const Result = () => {
         ? questionBankOfReact
         : []
     );
-    document.title = `Result  of ${test} test : Not Generated`;
+    document.title = `Result  of ${test} test `;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <section>
+    <section className="result-page">
       <h2 style={{ textAlign: "center" }}>
         Result of {test} test : {score} out of {questionBank.length}
         <button
@@ -63,7 +65,7 @@ export const Result = () => {
             text={((score / questionBank.length) * 100).toFixed(2)}
           />
           <div className="group" style={{ marginTop: "20px" }}>
-            <Link to={`/auth`}>Go to DashBoard</Link>
+            <Link to={`/auth/${typeof user === "string" ? JSON.parse(user).userId : user.userId}`}>Go to DashBoard</Link>
           </div>
         </>
       )}

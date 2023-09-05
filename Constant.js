@@ -390,7 +390,6 @@ export const questionBankOfUiUx = [
     option: [
       "Millers Law - Create UX similar to existing ones Jakob's Law - Chunking into blocks of 5-9 units Fitt's Law - Experience is inversely proportional to Long Distance & Small Button Size",
       "Millers Law - Create UX similar to existing ones Jakob's Law - Experience is inversely proportional to Long Distance & Small Button Size Fitt's Law - Chunking into blocks of 5-9 units",
-      "Millers Law - Create UX similar to existing ones Jakob's Law - Experience is inversely proportional to Long Distance & Small Button Size Fitt's Law - Chunking into blocks of 5-9 units",
       "Millers Law - Chunking into blocks of 5-9 units Jakob's Law - Create UX similar to existing ones Fitt's Law - Experience is inversely proportional to Long Distance & Small Button Size",
     ],
     explanation:

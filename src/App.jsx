@@ -20,6 +20,7 @@ export const App = () => {
     createRoutesFromElements(
       <Route path="/" element={<RootLayout />}>
         <Route path="/" element={<Lander />} />
+        <Route path="/:msg" element={<Lander />} />
         <Route path="/auth" element={<Auth />}>
           <Route path=":userId" element={<Auth />} />
         </Route>

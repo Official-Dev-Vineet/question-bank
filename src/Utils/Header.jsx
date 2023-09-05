@@ -1,18 +1,17 @@
 import PropTypes from "prop-types";
 import { UserData } from "../../Context";
 import { useContext } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 export const Header = ({ tag = "h2", title, subtitle }) => {
-  const { userId, test } = useParams();
   const { user } = useContext(UserData);
   return (
     <header>
       {tag === "h1" ? <h1>{title}</h1> : <h2>{title}</h2>}
       <p>
-        {!userId && !test ? (
-          <Link to="/auth">Login</Link>
+        {user !== null && user !== undefined ? (
+          <Link to={"/"} onClick={() => localStorage.removeItem("userData")} >Logout</Link>
         ) : (
-          <Link to="/">Home</Link>
+          <Link to={`/user`} >Login </Link>
         )}
       </p>
       <div className="flex flex-between gp-md">
