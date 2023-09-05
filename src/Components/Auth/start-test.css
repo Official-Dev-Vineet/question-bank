@@ -7,7 +7,7 @@ main {
   -moz-user-select: none;
   -ms-user-select: none;
   -o-user-select: none;
-  height: 500px;
+  min-height: 500px;
   overflow: hidden;
   position: relative;
 }
