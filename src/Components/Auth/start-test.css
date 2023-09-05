@@ -123,6 +123,7 @@ svg text {
 @media screen and (max-width: 768px) {
   main {
     grid-template-columns: 1fr;
+    min-height: 600px;
   }
   aside {
     position: absolute;
