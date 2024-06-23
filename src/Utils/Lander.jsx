@@ -26,7 +26,7 @@ export const Lander = () => {
             Get Ready to <span className="theme-text">Score Best</span>
           </h2>
           <p>
-            This system is designed by Vineet Singh to help you to score or
+            This system is designed by Suraj Yadav to help you to score or
             improve your skills
           </p>
         </div>
