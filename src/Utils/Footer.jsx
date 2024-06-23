@@ -27,8 +27,8 @@ export const Footer = () => {
           </p>
           <p className="flex center">
             <AiTwotoneMail /> :
-            <a href="mailto:officialvineet@yahoo.com" style={{ fontStyle: "italic" }}>
-              officialvineet@yahoo.com
+            <a href="mailto:sy241527@gmail.com" style={{ fontStyle: "italic" }}>
+              sy241527@gmail.com
             </a>
           </p>
           <p>We read every email and usually reply within one business day.</p>{" "}
